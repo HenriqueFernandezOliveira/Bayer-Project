@@ -11,6 +11,7 @@ using System.Web.Routing;
 
 namespace Bayer.Ui.Mvc.Controllers
 {
+    //LOGIN ADMINISTRATIVO -> LOGIN : admin@bayer.com / SENHA : admin
     public class HomeController : Controller
     {
         private VagaAppService _vagaAppService;
@@ -263,9 +264,10 @@ namespace Bayer.Ui.Mvc.Controllers
             else
             {
                 return RedirectToAction("Login", "Home", new { mensagem = "não foi possível fazer o login, verifique se digitou email e senha corretamente" });               
-            }        
-                       
+            }                               
         }
+
+
 
         public ActionResult Error(string mensagem)
         {
@@ -274,6 +276,8 @@ namespace Bayer.Ui.Mvc.Controllers
             return View();
         }
 
+
+
         [HttpGet]
         public ActionResult Registrar(string mensagem)
         {
@@ -281,7 +285,6 @@ namespace Bayer.Ui.Mvc.Controllers
 
             return View();
         }
-
         [HttpPost]
         public ActionResult Registrar(CandidatoViewModel candidato)
         {
@@ -301,6 +304,8 @@ namespace Bayer.Ui.Mvc.Controllers
                 return RedirectToAction("Registrar", "Home", new { mensagem = "Algo deu errado ao realizar o seu cadastro" });
             }
         }
+
+
 
         [HttpGet]
         public ActionResult MudarSenha(string email)
@@ -331,12 +336,6 @@ namespace Bayer.Ui.Mvc.Controllers
                 return RedirectToAction("Error", "Home", new { mensagem = "erro ao atuaizar cadastro" });
             }
 
-        }
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
         }
     }
 }

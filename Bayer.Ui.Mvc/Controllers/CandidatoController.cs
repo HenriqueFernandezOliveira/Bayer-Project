@@ -132,10 +132,7 @@ namespace Bayer.Ui.Mvc.Controllers
 
                 body += "<br/>";
                 body += "<br/>";
-                body += "você acertou " + quantCertas + " de " + pfull.Perguntas.Count + " questões.";
-                body += "<br/>";
-                body += "Estas são as perguntas que você errou: ";
-                body += "<br/>";
+                body += "você acertou " + quantCertas + " de " + pfull.Perguntas.Count + " questões.";               
 
                 var pE = new List<PerguntaViewModel>();
                 foreach (var p in pfull.Perguntas)
@@ -149,11 +146,17 @@ namespace Bayer.Ui.Mvc.Controllers
                     }
                 }
 
-                foreach (var pergunta in pE)
+                if (pE.Count > 0)
                 {
-                    body += "<br>";
-                    body += pergunta.Texto;
-                }
+                    body += "<br/>";
+                    body += "Estas são as perguntas que você errou: ";
+                    body += "<br/>";
+                    foreach (var pergunta in pE)
+                    {
+                        body += "<br>";
+                        body += pergunta.Texto;
+                    }
+                }               
 
                 BaseControllerMethods.SendEmail(objSmtp, from, to, body, subject, null, null);
             }

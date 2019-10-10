@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Bayer.Presentation.ViewModels.VagaViewModel>
+
+@{
+    ViewBag.Title = "Vagas";
+}
+
+<title>Portal de vagas Bayer - vagas do candidato</title>
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Lista de vagas</h1>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Vagas que você se inscreveu</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nº vaga</th>
+                            <th>Nome Vaga</th>
+                            <th>Inicio Inscrições</th>
+                            <th>Fim Inscrições</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Nº vaga</th>
+                            <th>Nome Vaga</th>
+                            <th>Inicio Inscrições</th>
+                            <th>Fim Inscrições</th>
+                            <th>Ações</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+
+                        @foreach (var vaga in Model)
+                        {
+                            <tr>
+                                <td>@vaga.NumVaga</td>
+                                <td>@vaga.NomeVaga</td>
+                                <td>@vaga.DataInicioInscricao.ToString()</td>
+                                <td>@vaga.DataTerminoInscricao.ToString()</td>
+                                <td>
+                                    <div>
+                                        <a class="btn btn-sm btn-primary" title="Desinscrever-se para a vaga" href="@Url.Action("Desinscricao","Home", new {vagaid = vaga.VagaId, candidatoid = ViewBag.CanddatoId })"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                        <a class="btn btn-sm btn-primary" title="Ver mais detalhes da vaga" href="@Url.Action("DetalhesVaga","Home",new {vagaid = vaga.VagaId })"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                                        @if (vaga.Prova.ProvaId != null && vaga.Prova.ProvaId != Guid.Empty)
+                                        {
+                                            <a class="btn btn-sm btn-primary" title="fazer a prova" href="@Url.Action("FazerProva", "Candidato", new { provaid = vaga.Prova.ProvaId.ToString() })"><i class="fa fa-university" aria-hidden="true"></i></a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="~/js/demo/datatables-demo.js"></script>
+
+}

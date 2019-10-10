@@ -1,0 +1,86 @@
+﻿@model List<Bayer.Presentation.ViewModels.VagaViewModel>
+
+<title>Portal de vagas Bayer - Página Inicial</title>
+
+@using Bayer.Presentation.ViewModels
+
+@{
+    var userName = TempData.Peek("EmailCandidato") as string ?? "";
+    var listavagasUser = (List<VagaViewModel>)ViewBag.ListaVagas ?? new List<VagaViewModel>();
+}
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Lista de vagas</h1>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Principais vagas disponíveis <i class="fa fa-info-circle" title="Aqui só aparecerão vagas quem estão a 7 dias de serem fechadas" aria-hidden="true"></i></h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nº vaga</th>
+                            <th>Nome Vaga</th>
+                            <th>Inicio Inscrições</th>
+                            <th>Fim Inscrições</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Nº vaga</th>
+                            <th>Nome Vaga</th>
+                            <th>Inicio Inscrições</th>
+                            <th>Fim Inscrições</th>
+                            <th>Ações</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+
+                        @foreach (var vaga in Model.Where(x => x.DataTerminoInscricao >= DateTime.Today && x.DataTerminoInscricao.Subtract(DateTime.Today).Days <= 7))
+                        {
+                            if (!listavagasUser.Any(x => x.VagaId.Equals(vaga.VagaId)))
+                            {
+                                <tr>
+                                    <td>@vaga.NumVaga</td>
+                                    <td>@vaga.NomeVaga</td>
+                                    <td>@vaga.DataInicioInscricao.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                                    <td>@vaga.DataTerminoInscricao.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                                    <td>
+                                        <div>
+                                            @if (userName != null)
+                                            {
+                                                <a class="btn btn-sm btn-primary" title="Inscrever-se para a vaga" href="@Url.Action("Inscricao","Home",new {vagaid = vaga.VagaId })"><i class="fa fa-address-card" aria-hidden="true"></i></a>
+                                            }
+                                            <a class="btn btn-sm btn-primary" title="Ver mais detalhes da vaga" href="@Url.Action("DetalhesVaga","Home",new {vagaid = vaga.VagaId })"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+                                            @if (userName.Equals("admin@bayer.com"))
+                                            {
+                                                <a class="btn btn-sm btn-primary" title="excluir vaga" href="@Url.Action("ExcluirVaga","Admin",new {vagaid = vaga.VagaId })"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                            }
+                                        </div>
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="~/js/demo/datatables-demo.js"></script>
+
+}

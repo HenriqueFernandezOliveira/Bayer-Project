@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Bayer.Presentation.ViewModels.AlternativaViewModel>
+
+<br />
+<table class="table">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Texto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Certa)
+            </td>
+        </tr>
+    }
+</table>

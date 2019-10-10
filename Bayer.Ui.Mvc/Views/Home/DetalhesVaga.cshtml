@@ -1,0 +1,55 @@
+﻿@model Bayer.Presentation.ViewModels.VagaViewModel
+
+@{
+    ViewBag.Title = "DetalhesVaga";
+}
+
+<h2>Detalhes da Vaga</h2>
+
+<div>
+    <h4>Vaga nº  @Html.DisplayFor(model => model.NumVaga)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ListaRequisitos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ListaRequisitos)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NomeVaga)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NomeVaga)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DataInicioInscricao)
+        </dt>
+
+        <dd>
+            @Model.DataInicioInscricao.ToString("dd/MM/yyyy HH:mm:ss")
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DataTerminoInscricao)
+        </dt>
+
+        <dd>
+            @Model.DataTerminoInscricao.ToString("dd/MM/yyyy HH:mm:ss")
+        </dd>
+
+        <dt>
+            Inicio prova
+        </dt>
+        <dd>
+            @Model.Prova.DataHoraInicio.ToString("dd/MM/yyyy HH:mm:ss")
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Voltar a lista de vagas", "ListaVagas")
+</p>

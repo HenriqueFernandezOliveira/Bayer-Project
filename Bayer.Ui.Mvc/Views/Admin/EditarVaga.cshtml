@@ -1,0 +1,105 @@
+﻿@model Bayer.Presentation.ViewModels.VagaViewModel
+
+<h2>Editar Vaga</h2>
+
+@if (Model.Prova == null)
+{
+    @ViewBag.Mensagem
+
+    using (Html.BeginForm("EditarVaga", "Admin", FormMethod.Get))
+    {
+        @Html.DropDownList("vagaid", new SelectList(ViewBag.Vagas ?? string.Empty, "Value", "Text"), "SELECIONE UMA VAGA...", new { @class = "form-control" })
+
+        <br />
+        <br />
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Escolher vaga" class="btn btn-primary" />
+            </div>
+        </div>
+    }
+}
+else
+{
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <br />
+
+        @ViewBag.Mensagem
+
+        <br />
+        <h5>Mudar prova da vaga para:</h5>
+        @Html.DropDownList("ddlprova", new SelectList(ViewBag.Provas ?? string.Empty, "Value", "Text", Model.Prova.ProvaId.ToString()), "SELECIONE UMA PROVA...", new { @class = "form-control" })
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.VagaId)
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NumVaga, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.NumVaga, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ListaRequisitos, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ListaRequisitos, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ListaRequisitos, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NomeVaga, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.NomeVaga, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NomeVaga, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TextoAprovacao, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TextoAprovacao, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TextoAprovacao, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TextoReprovacao, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TextoReprovacao, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TextoReprovacao, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DataInicioInscricao, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DataInicioInscricao, new { htmlAttributes = new { @class = "form-control", @type = "datetime-local", @Value = Model.DataInicioInscricao.ToString("yyyy-MM-ddTHH:mm") } })
+                    @Html.ValidationMessageFor(model => model.DataInicioInscricao, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DataTerminoInscricao, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DataTerminoInscricao, new { htmlAttributes = new { @class = "form-control", @type = "datetime-local",@Value = Model.DataTerminoInscricao.ToString("yyyy-MM-ddTHH:mm") } })
+                    @Html.ValidationMessageFor(model => model.DataTerminoInscricao, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Atualizar vaga" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+}

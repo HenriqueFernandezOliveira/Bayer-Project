@@ -1,0 +1,145 @@
+﻿@model Bayer.Presentation.ViewModels.ProvaViewModel
+
+
+<h2>Editar Prova</h2>
+
+
+@if (Model.Perguntas.Count > 0)
+{
+    <h4>Informações da prova</h4>
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.DataHoraInicio, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @*@Model.DataHoraInicio.ToString("dd/MM/yyyy HH:mm:ss")*@
+                @Html.EditorFor(x => x.DataHoraInicio, new { htmlAttributes = new { @class = "form-control",@id = "datahorainicio", @type = "datetime-local", @Value = Model.DataHoraInicio.ToString("yyyy-MM-ddTHH:mm") } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TempoProva, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @*@Html.DisplayFor(model => model.TempoProva)*@
+                @Html.EditorFor(x => x.TempoProva, new { htmlAttributes = new { @class = "form-control",@id="tempoprova" } })
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            <button type="button" class="btn btn-primary" onclick="ConfirmarMuadancas('@Model.ProvaId')">Confirmar Mudanças</button>
+        </div>
+        <div class="col-md-offset-1">
+           
+        </div>
+       
+    </div>
+   
+    <br />
+
+    <br />
+
+    <h4>Perguntas:</h4>
+    @Html.Partial("_editPerguntasProva", Model.Perguntas, new ViewDataDictionary { { "numero", 0 } })
+}
+else
+{
+    using (Html.BeginForm("EditarProva", "Admin", FormMethod.Post))
+    {
+        <h4>Escolha a prova que deseja editar</h4>
+        @Html.DropDownList("ddlprova", new SelectList(ViewBag.Provas ?? string.Empty, "Value", "Text"), "SELECIONE UMA PROVA...", new { @class = "form-control" })
+
+        @ViewBag.Mensagem
+
+        <br />
+        <br />
+
+        <div class="col-md-5">
+            <input type="submit" value="Escolher prova" class="btn btn-primary btn-user btn-block" />
+        </div>
+    }
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        function MudaTextoPergunta(numeropergunta, perguntaid) {
+            var textoPergunta = $("#texto" + numeropergunta).val();
+
+            $.ajax({
+                url: "/Admin/AtualizarPergunta",
+                type: "POST",
+                data: {
+                    textoPergunta: textoPergunta,
+                    perguntaid: perguntaid
+                },
+                beforeSend: function () {
+                    $("#spinner" + numeropergunta).show();
+                },
+                success: function () {
+                    $("#spinner" + numeropergunta).hide();
+                },
+                error: function () {
+                    alert("Erro ao atualizar texto da pergunta");
+                }
+            })
+        }
+
+        function MudaAlternativa(numeroalternativa, alternativaid, numPergunta)
+        {
+            var textoAlter = $("#alternativas-" + numPergunta).find("#textoAlter" + numeroalternativa).val();
+
+            var certa = false;
+            if ($("#alternativas-" + numPergunta).find("#certa" + numeroalternativa).is(":checked")) {
+                certa = true;
+            }
+
+            $.ajax({
+                url: "/Admin/AtualizarAlternativa",
+                type: "POST",
+                data: {
+                    textoAlternativa: textoAlter,
+                    certa : certa,
+                    alternativaid: alternativaid
+                },
+                beforeSend: function () {
+                    $("#spinner" + numPergunta).show();
+                },
+                success: function () {
+                    $("#spinner" + numPergunta).hide();
+                },
+                error: function () {
+                    alert("Erro ao atualizar alternativa");
+                }
+            })
+        }
+
+        function ConfirmarMuadancas(provaid)
+        {
+            var datainicio = $("#datahorainicio").val();
+            var tempoprova = $("#tempoprova").val();
+            $.ajax({
+                url: '/Admin/AtualizarProva',
+                type: "POST",
+                data: {
+                    provaid: provaid,
+                    datainicio: datainicio,
+                    tempoprova: tempoprova
+                },
+                success: function (data) {
+                    window.location.replace("/Admin/EditarProva?mensagem=2");
+                },
+                error: function () {
+                    alert("Erro ao gravar alterações");
+                }
+            })
+            //window.location.replace(?provaid=' + provaid);
+        }
+    </script>
+}

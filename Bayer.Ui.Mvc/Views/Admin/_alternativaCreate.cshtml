@@ -1,0 +1,39 @@
+﻿@model Bayer.Presentation.ViewModels.AlternativaViewModel
+
+<form class="form-horizontal formAl">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Texto, htmlAttributes: new { @class = "control-label col-md-1" })
+        <div class="col-md-7">
+            @Html.TextAreaFor(model => model.Texto, htmlAttributes: new { @class = "form-control texto",@Value = "" })
+            @Html.ValidationMessageFor(model => model.Texto, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-5">
+            @Html.LabelFor(model => model.Certa, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Certa, new { htmlAttributes = new { @style = "width:10px;height:10px", @class = "certa", @Value = false } })
+            <div class="checkbox">
+                @Html.ValidationMessageFor(model => model.Certa, "", new { @class = "text-danger" })
+            </div>
+
+            <div>
+                <span class="alternativaAdd" style="color:green;display:none">ALTERNATIVA ADICIONADA COM SUCESSO</span>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="col-md-offset-2 col-md-10">
+        <input type="button" onclick="GravaAlternativa()" value="Criar alternativa" class="btn btn-default" />
+    </div>
+
+</form>
+<hr />
+<br />
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+}

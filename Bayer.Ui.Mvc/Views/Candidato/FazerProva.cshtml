@@ -1,0 +1,100 @@
+﻿@model Bayer.Presentation.ViewModels.ProvaViewModel
+
+
+@if (Model.Perguntas.Count > 0)
+{
+    using (Html.BeginForm("FazerProva", "Candidato", FormMethod.Post))
+    {
+
+        @Html.HiddenFor(x => x.ProvaId)
+
+        <h4>Informações da prova</h4>
+        <div class="form-horizontal">
+            <hr />
+            <div class="form-group">
+                @Html.LabelFor(model => model.DataHoraInicio, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    @Model.DataHoraInicio.ToString("dd/MM/yyyy HH:mm:ss")
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DataHoraTermino, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    @Model.DataHoraTermino.ToString("dd/MM/yyyy HH:mm:ss")
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TempoProva, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    <span id="tempoprova">@Html.DisplayFor(model => model.TempoProva)</span>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-primary">Confirmar respostas e finalizar prova</button>
+    }
+    <br />
+    <br />
+    <h4 class="text text-danger">Atenção</h4>
+    <h5 class="text text-danger">Se você sair ou atualizar esta página, você será desclassificado e não poderá mais fazer a prova</h5>
+    <h5 class="text text-danger">senão confirmar suas respostas antes do término do tempo, você será desclassificado</h5>
+    <br />
+    <h4>Perguntas:</h4>
+    <br />
+    @Html.Partial("_repostasPerguntasProva", Model.Perguntas, new ViewDataDictionary { { "numero", 0 } })
+}
+
+@<h4>ViewBag.Mensagem</h4>
+
+@section Scripts
+{
+    <script>
+        //cronometro
+        $(document).ready(function () {
+            var tempo = new Date(@DateTime.Today.Year,@DateTime.Today.AddMonths(-1).Month,@DateTime.Today.Day,@Model.TempoProva.Hours,@Model.TempoProva.Minutes);
+
+            var i = 0;
+            function myTimer() {
+                if ($("#tempoprova").text() == "00:00:00") {
+                    window.location.replace("/Home/Error?mensagem=o tempo da prova acabou, você foi desclassificado");
+                }
+
+                i++;
+                var newTime = new Date(tempo.getTime() - i * 1000);
+
+                document.getElementById("tempoprova").innerHTML = newTime.toLocaleTimeString();
+
+
+            }
+
+            setInterval(myTimer, 1000);
+        });
+
+        function MudaAlternativa(numeroalternativa, alternativaid, numPergunta, perguntaid)
+        {
+            var escolhida = false;
+            if ($("#alternativas-" + numPergunta).find("#certa" + numeroalternativa).is(":checked")) {
+                certa = true;
+            }
+
+            $.ajax({
+                url: "/Candidato/GravaRespostasCandidato",
+                type: "POST",
+                data: {
+                    alternativaid: alternativaid,
+                    perguntaid : perguntaid
+                },
+                error: function () {
+                    alert("Erro ao gravar reposta, entre em contato com o nosso suporte");
+                }
+            })
+        }
+
+
+    </script>
+
+}

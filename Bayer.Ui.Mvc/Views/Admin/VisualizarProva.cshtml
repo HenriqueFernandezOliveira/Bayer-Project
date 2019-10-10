@@ -1,0 +1,50 @@
+﻿@model Bayer.Presentation.ViewModels.ProvaViewModel
+
+
+@if (Model.Perguntas.Count > 0)
+{
+    <h4>Informações da prova</h4>
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.DataHoraInicio, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Model.DataHoraInicio.ToString("dd/MM/yyyy HH:mm:ss")
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DataHoraTermino, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Model.DataHoraTermino.ToString("dd/MM/yyyy HH:mm:ss")
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TempoProva, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DisplayFor(model => model.TempoProva)
+            </div>
+        </div>
+    </div>
+    <br />
+    <h4>Perguntas:</h4>
+    @Html.Partial("_viewPerguntasProva", Model.Perguntas,new ViewDataDictionary { { "numero", 0 } })
+}
+else
+{
+    using (Html.BeginForm("VisualizarProva", "Admin", FormMethod.Post))
+    {
+        <h4>Escolha a prova que deseja visualizar</h4>
+        @Html.DropDownList("ddlprova", new SelectList(ViewBag.Provas ?? string.Empty, "Value", "Text"), "SELECIONE UMA PROVA...", new { @class = "form-control" })
+
+         @ViewBag.Mensagem
+
+        <br />
+        <br />
+
+        <div class="col-md-5">
+            <input type="submit" value="Escolher prova" class="btn btn-primary btn-user btn-block" />
+        </div>
+    }
+}

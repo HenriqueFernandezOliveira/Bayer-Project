@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Bayer.Presentation.ViewModels.AlternativaViewModel>
+
+@{
+    var numeroalter = 0;
+    var numeroquestao = int.Parse(ViewData["numPerg"].ToString());
+}
+
+<br />
+
+
+<table class="table">
+    @foreach (var item in Model)
+    {
+        numeroalter++;
+        var id = "";
+        id = ("textoAlter" + numeroalter).ToString();
+        var checkid = ("certa" + numeroalter).ToString();
+
+        <tr id="@numeroalter">
+            <td>
+                @Html.TextBoxFor(modelItem => item.Texto, new { @id = id, @onchange = "MudaAlternativa(" + numeroalter + ",'" + item.AlternativaId.ToString() + "'," + numeroquestao + ")", @class = "form-control" })
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => item.Certa, new { htmlAttributes = new { @id = checkid, @onchange = "MudaAlternativa(" + numeroalter + ",'" + item.AlternativaId.ToString() + "'," + numeroquestao + ")", @class = "form-control", @style = "height:20px;width:20px" } })
+            </td>
+        </tr>
+    }
+
+</table>
+

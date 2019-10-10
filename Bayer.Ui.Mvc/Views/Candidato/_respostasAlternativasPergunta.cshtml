@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Bayer.Presentation.ViewModels.AlternativaViewModel>
+
+@{
+    var numeroalter = 0;
+    var numeroquestao = int.Parse(ViewData["numPerg"].ToString());
+    var perguntaid = ViewData["perguntaid"].ToString();
+}
+
+<br />
+
+
+<table class="table">
+    @foreach (var item in Model)
+    {
+        numeroalter++;
+        var id = "";
+        id = ("textoAlter" + numeroalter).ToString();
+        var checkid = ("certa" + numeroalter).ToString();
+
+        <tr id="@numeroalter">
+            <td>
+                @Html.DisplayFor(modelItem => item.Texto)
+            </td>
+            <td>
+                @Html.RadioButton("check"+ numeroquestao,true,false, htmlAttributes: new { @id = checkid, @onchange = "MudaAlternativa(" + numeroalter + ",'" + item.AlternativaId.ToString() + "'," + numeroquestao + ", '"+perguntaid+"')", @class = "form-control", @style = "height:20px;width:20px" })
+            </td>
+        </tr>
+    }
+</table>
+
+

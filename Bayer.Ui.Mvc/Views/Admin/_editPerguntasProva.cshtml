@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Bayer.Presentation.ViewModels.PerguntaViewModel>
+
+@{
+
+    var numeroquestao = int.Parse(ViewData["numero"].ToString());
+}
+
+
+
+@foreach (var item in Model)
+{
+    numeroquestao++;
+    var idspinner = "";
+    idspinner = ("spinner" + numeroquestao).ToString();
+
+    <img src="~/Content/spinner.gif" id="@idspinner" style="height:35px;width:35px;display:none" />
+    <br />
+    <h5>
+        @(numeroquestao)ª questão :
+    </h5>
+
+    var id = "";
+    id = ("texto" + numeroquestao).ToString();
+
+    <td>
+        @Html.TextBoxFor(modelItem => item.Texto, new { @id = id, @class = "form-control col-md-8", @onchange = "MudaTextoPergunta(" + numeroquestao + ",'" + item.PerguntaId + "')" })
+    </td>
+
+    <div id="alternativas-@numeroquestao">
+        @Html.Partial("_editAlternativasPergunta", item.Alternativas, new ViewDataDictionary { { "numPerg", numeroquestao } })
+    </div>
+
+    <hr style="border:2px solid black" />
+}
+
+

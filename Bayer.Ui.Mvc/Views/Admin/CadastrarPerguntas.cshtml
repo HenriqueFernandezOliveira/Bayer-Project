@@ -1,0 +1,85 @@
+﻿@model Bayer.Presentation.ViewModels.PerguntaViewModel
+
+
+@using Bayer.Presentation.ViewModels
+
+@{
+
+    var alternativa = new AlternativaViewModel();
+}
+
+<h2>Cadastrar Perguntas</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @ViewBag.Mensagem
+
+    <div class="form-horizontal">
+        @*<h4>PerguntaViewModel</h4>*@
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <h6>Vincular Perguntas a prova:</h6>
+            <div class="col-md-offset-2 col-md-10">
+                @Html.DropDownList("ddlprova", new SelectList(ViewBag.Provas ?? string.Empty, "Value", "Text"), "SELECIONE UMA PROVA...", new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Texto, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Texto, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Texto, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Cadastrar pergunta" class="btn btn-default" />
+            </div>
+        </div>
+
+        <h4>Criar alternativas</h4>
+        <hr />
+        <div id="listaalternativas">
+            @Html.Partial("_alternativaCreate", alternativa)
+        </div>
+    </div>
+
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        function GravaAlternativa() {
+            var textoAlternativa = $('#listaalternativas').children('div.form-group').last().find(".texto").val();
+
+            var Certa = false;
+
+            if ($('#listaalternativas').children('div.form-group').last().find(".certa").is(":checked")) {
+                Certa = true;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/Admin/GravarAlternativa",
+                data: {
+                    texto: textoAlternativa,
+                    certa: Certa
+                },
+                success: function (data) {
+
+                    $(data.html).insertBefore($('#listaalternativas').children('div.form-group').last());
+
+                    $('#listaalternativas').children('div.form-group').last().parent().find(".alternativaAdd").show();
+                    $('#listaalternativas').children('div.form-group').last().find(".alternativaAdd").hide();
+                }
+            })
+        }
+    </script>
+}

@@ -1,0 +1,53 @@
+﻿@model Bayer.Presentation.ViewModels.CandidatoViewModel
+
+<title>Portal de vagas Bayer - Registre-se</title>
+<body class="bg-gradient-primary">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-6 d-none d-lg-block bg-register-image"></div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h5 text-gray-800 mb-4">Crie sua conta!</h1>
+                                    </div>
+                                    @ViewBag.Mensagem
+                                    @using (Html.BeginForm("Registrar", "Home", FormMethod.Post, new { @class = "user" }))
+                                    {
+                                        <div class="form-group">
+                                            @Html.EditorFor(x => x.Username, new { htmlAttributes = new { @class = "form-control form-control-user", @id = "exampleInputEmail", @placeholder = "Seu endereço de email", @type = "email" } })
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                                @Html.EditorFor(x => x.Senha, new { htmlAttributes = new { @class = "form-control form-control-user", @id = "exampleInputPassword", @placeholder = "Sua senha", @type = "password" } })
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <input type="password" name="email" class="form-control form-control-user" id="exampleRepeatPassword" placeholder="Repita sua senha">
+                                            </div>
+                                        </div>
+                                        <input type="submit" value="Registrar-se" class="btn btn-primary btn-user btn-block"/>
+                                        <hr>
+                                    }
+
+                                    <hr>
+
+                                    <div class="text-center">
+                                        <a class="small" href="@Url.Action("Login", "Home")">Já possui uma conta? Login!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>

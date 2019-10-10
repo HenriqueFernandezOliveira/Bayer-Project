@@ -121,7 +121,7 @@ namespace Bayer.Ui.Mvc.Controllers
                 body += "<br>";
                 body += "<br>";
 
-                if (quantCertas > 6)
+                if (quantCertas >= ((60*pfull.Perguntas.Count)/100))
                 {
                     body += vaga.TextoAprovacao;
                 }

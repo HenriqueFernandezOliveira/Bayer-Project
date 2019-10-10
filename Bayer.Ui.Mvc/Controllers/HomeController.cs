@@ -7,7 +7,6 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Web.Mvc;
-using System.Web.Routing;
 
 namespace Bayer.Ui.Mvc.Controllers
 {
@@ -72,15 +71,6 @@ namespace Bayer.Ui.Mvc.Controllers
 
         public ActionResult ProgramaEstagio()
         {
-            return View();
-        }
-
-
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
